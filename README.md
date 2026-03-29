@@ -1,0 +1,2 @@
+# EventManagement_and_TicketBooking_System
+📌 Event Management and Ticket Booking System  A full-stack web app for browsing events and booking tickets. Built with React.js, Node.js, Express.js, and MongoDB, it features user and admin modules with REST API integration, enabling efficient event management and a seamless booking experience.
