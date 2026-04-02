@@ -6,6 +6,7 @@ const bookings=new mongoose.Schema({
    eventId:{type:mongoose.Schema.Types.ObjectId,required:true,ref:"Event"},
    userName:{type:String,required:true,maxLength:[25,"maximum length reached for naming convention"]},
    quantity:{type:Number,required:true},
+  
    createdAt:{type:Date,default:Date.now},
    updatedAt:{type:Date,default:Date.now}
 
