@@ -1,5 +1,5 @@
-import {bookingModel} from '../Model/bookingSchema.js';
-import {eventModel} from '../Model/eventSchema.js';
+import bookingModel from '../Model/bookingSchema.js';
+import eventModel from '../Model/eventSchema.js';
 
 export const bookTicket =async (req,res)=>{
     try{

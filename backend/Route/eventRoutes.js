@@ -1,5 +1,5 @@
-import express from 'exress';
-import eventModel from './Model/eventSchema.js';
+import express from 'express';
+import eventModel from '../Model/eventSchema.js';
 
 
 
