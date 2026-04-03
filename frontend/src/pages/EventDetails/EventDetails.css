@@ -1,0 +1,236 @@
+/* src/pages/EventDetails.css */
+
+.event-details {
+  min-height: 100vh;
+  background: #f7f7fb;
+  font-family: 'Sora', 'Segoe UI', sans-serif;
+}
+
+/* ── Nav ── */
+.event-details__nav {
+  padding: 20px 5%;
+  background: #fff;
+  border-bottom: 1px solid #ebebf5;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.event-details__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f0f1a;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.event-details__back:hover {
+  color: #ff5c35;
+}
+
+/* ── Hero ── */
+.event-details__hero {
+  position: relative;
+  height: clamp(240px, 40vw, 480px);
+  overflow: hidden;
+}
+
+.event-details__hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-details__hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(15, 15, 26, 0.55));
+}
+
+/* ── Main Content ── */
+.event-details__content {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 5%;
+  align-items: start;
+}
+
+/* ── Left ── */
+.event-details__category-tag {
+  display: inline-block;
+  background: rgba(255, 92, 53, 0.12);
+  color: #ff5c35;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+
+.event-details__title {
+  font-size: clamp(26px, 3.5vw, 40px);
+  font-weight: 800;
+  color: #0f0f1a;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  margin: 0 0 20px;
+}
+
+.event-details__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.event-details__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.event-details__about-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f0f1a;
+  margin: 0 0 14px;
+  letter-spacing: -0.02em;
+}
+
+.event-details__description {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #4b5563;
+  margin: 0;
+}
+
+/* ── Right: Ticket Card ── */
+.event-details__right {
+  position: sticky;
+  top: 80px;
+}
+
+.event-details__ticket-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.event-details__ticket-label {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f0f1a;
+  margin: 0;
+}
+
+.event-details__ticket-price {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.event-details__ticket-price span {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f0f1a;
+  display: block;
+  margin-top: 2px;
+}
+
+.event-details__ticket-perks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.event-details__ticket-perks li {
+  font-size: 13px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.event-details__ticket-btn {
+  width: 100%;
+  padding: 14px;
+  background: #ff5c35;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.event-details__ticket-btn:hover {
+  background: #e8451f;
+  transform: translateY(-1px);
+}
+
+.event-details__ticket-note {
+  font-size: 12px;
+  color: #9ca3af;
+  text-align: center;
+  margin: 0;
+}
+
+/* ── Related ── */
+.event-details__related {
+  padding: 20px 5% 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.event-details__related-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f0f1a;
+  margin: 0 0 28px;
+  letter-spacing: -0.02em;
+}
+
+.event-details__related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .event-details__content {
+    grid-template-columns: 1fr;
+  }
+
+  .event-details__right {
+    position: static;
+  }
+
+  .event-details__related-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .event-details__related-grid {
+    grid-template-columns: 1fr;
+  }
+}

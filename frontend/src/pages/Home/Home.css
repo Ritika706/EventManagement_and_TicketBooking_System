@@ -1,0 +1,185 @@
+/* src/pages/Home.css */
+
+.home {
+  min-height: 100vh;
+  background: #f7f7fb;
+  font-family: 'Sora', 'Segoe UI', sans-serif;
+}
+
+/* ── Hero ── */
+.home__hero {
+  position: relative;
+  background: #0f0f1a;
+  padding: 80px 5% 90px;
+  overflow: hidden;
+}
+
+.home__hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+}
+
+.home__hero-blob {
+  position: absolute;
+  top: -120px;
+  right: -160px;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle at 40% 40%, #ff5c35 0%, transparent 70%);
+  opacity: 0.25;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.home__hero-pill {
+  display: inline-block;
+  background: rgba(255, 92, 53, 0.15);
+  color: #ff7a5a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.home__hero-title {
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+}
+
+.home__hero-accent {
+  color: #ff5c35;
+}
+
+.home__hero-sub {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 16px;
+  margin: 0 0 32px;
+  line-height: 1.6;
+}
+
+/* Search bar */
+.home__search {
+  display: flex;
+  gap: 0;
+  max-width: 520px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.home__search-input {
+  flex: 1;
+  padding: 14px 20px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  background: #1c1c2e;
+  color: #fff;
+}
+
+.home__search-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.home__search-btn {
+  padding: 14px 24px;
+  background: #ff5c35;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: background 0.2s;
+}
+
+.home__search-btn:hover {
+  background: #e8451f;
+}
+
+/* ── Events Section ── */
+.home__events {
+  padding: 60px 5%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.home__events-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.home__section-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f0f1a;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* Filters */
+.home__filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.home__filter-btn {
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1.5px solid #e0e0ea;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.home__filter-btn:hover {
+  border-color: #0f0f1a;
+  color: #0f0f1a;
+}
+
+.home__filter-btn.active {
+  background: #0f0f1a;
+  border-color: #0f0f1a;
+  color: #fff;
+}
+
+/* Cards Grid */
+.home__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .home__events-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .home__search {
+    flex-direction: column;
+    border-radius: 12px;
+  }
+
+  .home__search-input,
+  .home__search-btn {
+    border-radius: 0;
+  }
+}
