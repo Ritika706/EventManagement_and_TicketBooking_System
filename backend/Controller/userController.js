@@ -25,3 +25,34 @@ export const createUser=async(req,res)=>{
 }
 
 
+
+// FOR ADMIN 
+
+
+// get all the users
+
+export const getAllUsers=async(req,res)=>{
+    try{
+         const allusers=await user.find();
+         res.status(200).json({message:"All Users : ",allusers});
+    }catch(error){
+        res.status(500).json({message:"Server error"});
+    }
+}
+
+
+// get the user by id
+
+export const getUserById=(req,res)=>{
+    try{
+        const id=req.params.id;
+        const oneuser=user.findById(id);
+        if(!oneuser){
+            return res.status(404).json({message:"User Does not exist"});
+        }
+        res.status(200).json({message:"User Found by id : ",oneuser});
+
+    }catch(error){
+        res.status(500).json({message:"Server error "});
+    }
+}
