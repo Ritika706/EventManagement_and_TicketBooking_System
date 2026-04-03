@@ -56,3 +56,6 @@ export const getUserById=(req,res)=>{
         res.status(500).json({message:"Server error "});
     }
 }
+
+// delete user if the user is invalid or for any other reasons
+
