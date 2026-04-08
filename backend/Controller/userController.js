@@ -1,8 +1,9 @@
 import user from '..Model/userSchema.js';
 import bcrypt from 'bcrypt';
 
-// create user
 
+
+// create user
 export const createUser=async(req,res)=>{
  try{
     const {name,email,password,role}=req.body;
@@ -59,3 +60,16 @@ export const getUserById=(req,res)=>{
 
 // delete user if the user is invalid or for any other reasons
 
+export const deleteUserById=async (req,res)=>{
+    try{
+        const id=req.params.id;
+        const idx=await user.find(id);
+        if(idx===-1){
+            return res.status(404).json({message:"User Does not exist"});
+        }
+
+        user=user.splice()
+    }catch(error){
+        res.status(500).json({message:"Server Error"});
+    }
+}
