@@ -5,7 +5,7 @@ export const userSchema=new mongoose.Schema({
    email:{type:String,required:true,unique:true,match: [/^\S+@\S+\.\S+$/, "Please use a valid email address"]},
    password:{type:String,required:true,minLength:[8,"Password must be of atleast 8 Characters"]},
 //    enum ka matlab hai ki inme se koi do role he ho sakta hai
-   role:{type:String,enum:['user','admin'],default:user,required:true}
+   role:{type:String,enum:['user','admin'],required:true}
 });
 
 const user=mongoose.model('User',userSchema);
