@@ -28,6 +28,7 @@ app.use("/api/booking",bookingRoute);
 
 // route for the users
 app.use("/api/user",userRoutes);
+
 app.get('/',(req,res)=>{
     res.send("Welcome")
 })
