@@ -1,22 +1,25 @@
-import express from 'express';
+import express from "express";
 
-import {bookTicket, getAllBooking, getBookingById} from '../Controller/bookingController.js';
+import {
+	bookTicket,
+	getAllBookings,
+	getBookingsByUser,
+	cancelBooking,
+} from "../Controller/bookingController.js";
+import { authMiddleware, isAdmin } from "../middleware/authMiddleware.js";
+import { validateBody, validateParams } from "../middleware/validate.js";
+import { bookingCreateSchema, bookingIdParamsSchema, userIdParamsSchema } from "../validation/schemas.js";
 
-const router=express.Router();
+const router = express.Router();
 
-// to book the tickets
-router.post('/book-ticket',bookTicket);
+// Frontend-compatible
+router.post("/book-ticket", authMiddleware, validateBody(bookingCreateSchema), bookTicket);
 
+// Admin: view all bookings
+router.get("/bookings", authMiddleware, isAdmin, getAllBookings);
 
-// FOR ADMIN
-
-
-// to get all the users
-router.get('/get-all-bookings',getAllBooking);
-
-// to get the booking by id
-router.get('/get-booking-byId/:id',getBookingById);
-
-
+// User: view own bookings
+router.get("/bookings/:userId", authMiddleware, validateParams(userIdParamsSchema), getBookingsByUser);
+router.delete("/bookings/:id", authMiddleware, validateParams(bookingIdParamsSchema), cancelBooking);
 
 export default router;

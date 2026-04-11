@@ -1,17 +1,31 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const bookings=new mongoose.Schema({
-    // we will get this id from mongoDb so our user can book the ticket of that particular event
-    //   Event ka matlab ki ye eventId Event wale collection se linked hai
-   eventId:{type:mongoose.Schema.Types.ObjectId,required:true,ref:"Event"},
-   userName:{type:String,required:true,maxLength:[25,"maximum length reached for naming convention"]},
-   quantity:{type:Number,required:true},
-  
-   createdAt:{type:Date,default:Date.now},
-   updatedAt:{type:Date,default:Date.now}
+const bookingSchema = new mongoose.Schema(
+    {
+        // Legacy field name kept: eventId
+        eventId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Event" },
 
-});
+        // Frontend expects a user object on booking; store userId and populate.
+        userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
 
-const bookingModel=mongoose.model("Booking",bookings);
+        // Optional legacy / display name
+        userName: { type: String, trim: true, maxLength: [25, "maximum length reached for naming convention"] },
+
+        quantity: { type: Number, required: true, min: 1 },
+        totalAmount: { type: Number, required: true, min: 0, default: 0 },
+
+        status: {
+            type: String,
+            enum: ["confirmed", "pending", "cancelled"],
+            default: "confirmed",
+        },
+
+        // For industry-style flow: pending booking holds inventory until this time.
+        lockExpiresAt: { type: Date, default: null, index: true },
+    },
+    { timestamps: true }
+);
+
+const bookingModel = mongoose.model("Booking", bookingSchema);
 
 export default bookingModel;
