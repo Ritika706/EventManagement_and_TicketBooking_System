@@ -1,4 +1,4 @@
-// ── My Bookings Page ──────────────────────────────────────────────────────────
+//My Bookings Page
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";

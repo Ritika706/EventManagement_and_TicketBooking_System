@@ -1,4 +1,4 @@
-// ── Home Page ─────────────────────────────────────────────────────────────────
+//Home Page
 // Displays all events with search and category filter.
 
 import React, { useState, useEffect, useCallback } from "react";
