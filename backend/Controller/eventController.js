@@ -198,7 +198,7 @@ export const updateEvent = async (req, res) => {
         }
 
         const updated = await eventModel.findByIdAndUpdate(id, updates, {
-            new: true,
+            returnDocument: "after",
             runValidators: true,
         });
 
