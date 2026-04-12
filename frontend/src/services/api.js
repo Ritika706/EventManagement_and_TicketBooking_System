@@ -6,7 +6,6 @@ import axios from "axios";
 
 const rawBaseUrl =
   process.env.REACT_APP_API_URL ||
-  process.env.VITE_API_URL ||
   "http://localhost:5000/api";
 const parsedBaseUrl = /^https?:\/\//i.test(rawBaseUrl)
   ? rawBaseUrl
