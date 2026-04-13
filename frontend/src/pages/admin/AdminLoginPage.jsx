@@ -53,6 +53,8 @@ const AdminLoginPage = () => {
       />
 
       <div className="relative z-10 w-full max-w-md animate-slide-up">
+<<<<<<< HEAD
+=======
         {/* Back */}
         <div className="mb-6">
           <button
@@ -74,6 +76,7 @@ const AdminLoginPage = () => {
           </button>
         </div>
 
+>>>>>>> dev
         {/* Header */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-gold-400 to-ember shadow-2xl shadow-gold-500/30 mb-4">
@@ -105,6 +108,9 @@ const AdminLoginPage = () => {
             </div>
 
             <div>
+<<<<<<< HEAD
+              <label className="input-label">Password</label>
+=======
               <div className="flex items-center justify-between mb-1.5">
                 <label className="input-label mb-0">Password</label>
                 <Link
@@ -114,6 +120,7 @@ const AdminLoginPage = () => {
                   Forgot password?
                 </Link>
               </div>
+>>>>>>> dev
               <input
                 type="password"
                 name="password"

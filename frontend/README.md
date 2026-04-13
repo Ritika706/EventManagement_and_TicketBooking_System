@@ -118,6 +118,13 @@ REACT_APP_API_URL=http://localhost:5000/api
 
 ## 🔐 Authentication Flow
 
+<<<<<<< HEAD
+1. User logs in → receives `{ token, user }` from API
+2. Token and user object saved to `localStorage`
+3. Axios interceptor attaches `Authorization: Bearer <token>` to all requests
+4. On 401 response → auto-logout and redirect to `/login`
+5. `ProtectedRoute` checks `localStorage` for valid token and role
+=======
 1. Login → verify credentials → generate JWT → send `{ token, user }`
 2. Token and user object saved to `localStorage`
 3. Role check → redirect user to `/` or admin to `/admin/dashboard`
@@ -161,6 +168,7 @@ flowchart TD
 - Invalid email (login / forgot password) → `404`
 - Wrong password → `401`
 - Expired reset token → shows an error message (e.g. "Reset token expired")
+>>>>>>> dev
 
 ---
 
