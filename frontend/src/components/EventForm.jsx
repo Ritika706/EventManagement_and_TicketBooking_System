@@ -60,24 +60,13 @@ const EventForm = ({ initialData, onSubmit, isEdit = false }) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const isLikelyImageUrl = (value) => {
+  const isValidImageSourceUrl = (value) => {
     const raw = String(value || "").trim();
     if (!raw) return true; // optional
     if (/^data:image\//i.test(raw)) return true;
     try {
       const u = new URL(raw);
-      if (!/^https?:$/i.test(u.protocol)) return false;
-      const pathnameLooksLikeImage = /\.(png|jpe?g|webp|gif|svg)$/i.test(u.pathname);
-      const queryLooksLikeImage = /(\bformat\b|\bfm\b)=(png|jpe?g|webp|gif|svg)/i.test(u.search);
-      const knownImageHosts = new Set([
-        "images.unsplash.com",
-        "source.unsplash.com",
-        "images.pexels.com",
-        "images.pexels.com",
-        "cdn.pixabay.com",
-        "picsum.photos",
-      ]);
-      return pathnameLooksLikeImage || queryLooksLikeImage || knownImageHosts.has(u.hostname);
+      return /^https?:$/i.test(u.protocol);
     } catch {
       return false;
     }
@@ -118,7 +107,7 @@ const EventForm = ({ initialData, onSubmit, isEdit = false }) => {
     if (!form.location.trim()) return "Location is required.";
     if (form.price === "" || isNaN(Number(form.price))) return "Valid price is required (use 0 for free).";
     if (!form.totalTickets || isNaN(Number(form.totalTickets))) return "Total tickets count is required.";
-    if (!isLikelyImageUrl(form.imageUrl)) return "Image URL must be a direct image link (ending in .jpg/.png/.webp etc).";
+    if (!isValidImageSourceUrl(form.imageUrl)) return "Image URL must be a valid http/https link.";
     return null;
   };
 
@@ -275,7 +264,7 @@ const EventForm = ({ initialData, onSubmit, isEdit = false }) => {
           onChange={handleChange}
         />
         <p className="text-xs text-gray-600 mt-1">
-          Use a direct image URL (ending in .jpg/.png/.webp). Pexels/Google pages won’t work—copy the actual image address.
+          Google image address, CDN link, ya kisi bhi website ka valid image URL paste kar sakte ho.
         </p>
       </div>
 
