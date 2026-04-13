@@ -53,6 +53,30 @@ const AdminLoginPage = () => {
       />
 
       <div className="relative z-10 w-full max-w-md animate-slide-up">
+<<<<<<< HEAD
+=======
+        {/* Back */}
+        <div className="mb-6">
+          <button
+            type="button"
+            onClick={() => {
+              if (window.history.length > 1) navigate(-1);
+              else navigate("/");
+            }}
+            className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors text-sm bg-ink-900/60 backdrop-blur-sm px-4 py-2 rounded-lg border border-ink-700/50"
+          >
+            <svg viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
+              <path
+                fillRule="evenodd"
+                d="M7.78 12.53a.75.75 0 01-1.06 0L2.47 8.28a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L4.81 7h7.44a.75.75 0 010 1.5H4.81l2.97 2.97a.75.75 0 010 1.06z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Back
+          </button>
+        </div>
+
+>>>>>>> dev
         {/* Header */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-gold-400 to-ember shadow-2xl shadow-gold-500/30 mb-4">
@@ -84,7 +108,19 @@ const AdminLoginPage = () => {
             </div>
 
             <div>
+<<<<<<< HEAD
               <label className="input-label">Password</label>
+=======
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="input-label mb-0">Password</label>
+                <Link
+                  to="/forgot-password?role=admin"
+                  className="text-xs text-gold-400 hover:text-gold-300 transition-colors"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+>>>>>>> dev
               <input
                 type="password"
                 name="password"

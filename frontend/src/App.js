@@ -11,6 +11,11 @@ import ProtectedRoute from "./components/ProtectedRoute";
 // ── User Pages ─────────────────────────────────────────────────────────────
 import LoginPage       from "./pages/LoginPage";
 import SignupPage      from "./pages/SignupPage";
+<<<<<<< HEAD
+=======
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+>>>>>>> dev
 import HomePage        from "./pages/HomePage";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import BookingPage     from "./pages/BookingPage";
@@ -49,6 +54,12 @@ const App = () => (
       {/* ── Public: User Auth ─────────────────────────────────────────── */}
       <Route path="/login"  element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+<<<<<<< HEAD
+=======
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
+      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+>>>>>>> dev
 
       {/* ── Public: Admin Auth ────────────────────────────────────────── */}
       <Route path="/admin/login" element={<AdminLoginPage />} />

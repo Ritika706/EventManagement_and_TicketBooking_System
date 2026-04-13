@@ -1,6 +1,10 @@
 // ── View Bookings Page (Admin) ────────────────────────────────────────────────
 
 import React, { useState, useEffect, useCallback } from "react";
+<<<<<<< HEAD
+=======
+import { useNavigate } from "react-router-dom";
+>>>>>>> dev
 import Navbar from "../../components/Navbar";
 import { Loader } from "../../components/Loader";
 import Alert from "../../components/Alert";
@@ -27,6 +31,10 @@ const STATUS_STYLES = {
 };
 
 const ViewBookingsPage = () => {
+<<<<<<< HEAD
+=======
+  const navigate = useNavigate();
+>>>>>>> dev
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -80,10 +88,36 @@ const ViewBookingsPage = () => {
   const totalRevenue = bookings.reduce((s, b) => s + (b.totalAmount || 0), 0);
   const confirmedCount = bookings.filter((b) => b.status === "confirmed").length;
 
+<<<<<<< HEAD
+=======
+  const formatInr = (value, fractionDigits = 2) =>
+    new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+    }).format(Number(value || 0));
+
+>>>>>>> dev
   return (
     <div className="page-wrapper noise-overlay">
       <Navbar />
       <div className="pt-24 pb-16 content-container">
+<<<<<<< HEAD
+=======
+        {/* Back */}
+        <button
+          type="button"
+          onClick={() => navigate("/admin/dashboard")}
+          className="inline-flex items-center gap-2 text-gray-300 hover:text-white transition-colors text-sm bg-ink-900/60 backdrop-blur-sm px-4 py-2 rounded-lg border border-ink-700/50 mb-6"
+        >
+          <svg viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
+            <path fillRule="evenodd" d="M7.78 12.53a.75.75 0 01-1.06 0L2.47 8.28a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L4.81 7h7.44a.75.75 0 010 1.5H4.81l2.97 2.97a.75.75 0 010 1.06z" clipRule="evenodd" />
+          </svg>
+          Back to Dashboard
+        </button>
+
+>>>>>>> dev
         {/* Header */}
         <div className="mb-8">
           <p className="text-gold-400 text-sm font-mono uppercase tracking-widest mb-1">Admin</p>
@@ -95,7 +129,11 @@ const ViewBookingsPage = () => {
           {[
             { label: "Total", value: bookings.length, color: "text-white" },
             { label: "Confirmed", value: confirmedCount, color: "text-emerald-400" },
+<<<<<<< HEAD
             { label: "Revenue", value: `$${totalRevenue.toLocaleString()}`, color: "text-gold-400" },
+=======
+            { label: "Revenue", value: formatInr(totalRevenue, 0), color: "text-gold-400" },
+>>>>>>> dev
             { label: "Cancelled", value: bookings.filter((b) => b.status === "cancelled").length, color: "text-red-400" },
           ].map(({ label, value, color }) => (
             <div key={label} className="glass-card p-4 text-center">
@@ -223,7 +261,11 @@ const ViewBookingsPage = () => {
                           {/* Amount */}
                           <td className="px-5 py-4">
                             <span className="font-mono font-semibold text-gold-400">
+<<<<<<< HEAD
                               ${(booking.totalAmount || 0).toFixed(2)}
+=======
+                              {formatInr(booking.totalAmount || 0, 2)}
+>>>>>>> dev
                             </span>
                           </td>
 
