@@ -39,11 +39,12 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  const NavLink = ({ to, children }) => {
+  const NavLink = ({ to, state, children }) => {
     const active = location.pathname === to;
     return (
       <Link
         to={to}
+        state={state}
         className={`relative text-sm font-medium transition-colors px-1 py-0.5 group ${
           active ? "text-gold-400" : "text-gray-400 hover:text-white"
         }`}
@@ -61,7 +62,13 @@ const Navbar = () => {
   const userLinks = (
     <>
       <NavLink to="/">Events</NavLink>
-      <NavLink to="/my-bookings">My Bookings</NavLink>
+      {authed ? (
+        <NavLink to="/my-bookings">My Bookings</NavLink>
+      ) : (
+        <NavLink to="/login" state={{ from: { pathname: "/my-bookings" } }}>
+          My Bookings
+        </NavLink>
+      )}
     </>
   );
 
@@ -89,7 +96,7 @@ const Navbar = () => {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-6">
-            {authed && (admin ? adminLinks : userLinks)}
+            {admin ? adminLinks : userLinks}
           </div>
 
           {/* Right actions */}
@@ -164,6 +171,11 @@ const Navbar = () => {
               </>
             ) : (
               <>
+                <Link to="/" className="mobile-nav-link">Events</Link>
+                    <Link to="/login" state={{ from: { pathname: "/my-bookings" } }} className="mobile-nav-link">
+                      My Bookings
+                    </Link>
+                <hr className="border-ink-700" />
                 <Link to="/login" className="btn-secondary w-full justify-center">Sign In</Link>
                 <Link to="/signup" className="btn-primary w-full justify-center">Get Started</Link>
               </>

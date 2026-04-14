@@ -1,7 +1,7 @@
 // ── Manage Events Page ────────────────────────────────────────────────────────
 
-import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import EventCard from "../../components/EventCard";
 import EventForm from "../../components/EventForm";
@@ -77,6 +77,8 @@ const DeleteModal = ({ eventTitle, onConfirm, onClose, loading }) => (
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 const ManageEventsPage = () => {
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -85,6 +87,13 @@ const ManageEventsPage = () => {
   const [editEvent, setEditEvent] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
+
+  const selectedCategory = useMemo(() => {
+    const raw = searchParams.get("category");
+    return raw ? String(raw) : "";
+  }, [searchParams]);
+
+  const categories = ["Music", "Tech", "Food", "Art", "Sports", "Conference", "Other"];
 
   const fetchEvents = useCallback(async () => {
     setLoading(true);
@@ -126,9 +135,15 @@ const ManageEventsPage = () => {
     }
   };
 
-  const filtered = events.filter((e) =>
-    !search || e.title?.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = events.filter((e) => {
+    const matchesSearch =
+      !search ||
+      e.title?.toLowerCase().includes(search.toLowerCase()) ||
+      String(e.category || "Other").toLowerCase().includes(search.toLowerCase());
+    const matchesCategory =
+      !selectedCategory || String(e.category || "Other").toLowerCase() === selectedCategory.toLowerCase();
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="page-wrapper noise-overlay">
@@ -152,6 +167,18 @@ const ManageEventsPage = () => {
       )}
 
       <div className="pt-24 pb-16 content-container">
+        {/* Back */}
+        <button
+          type="button"
+          onClick={() => navigate("/admin/dashboard")}
+          className="inline-flex items-center gap-2 text-gray-300 hover:text-white transition-colors text-sm bg-ink-900/60 backdrop-blur-sm px-4 py-2 rounded-lg border border-ink-700/50 mb-6"
+        >
+          <svg viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
+            <path fillRule="evenodd" d="M7.78 12.53a.75.75 0 01-1.06 0L2.47 8.28a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L4.81 7h7.44a.75.75 0 010 1.5H4.81l2.97 2.97a.75.75 0 010 1.06z" clipRule="evenodd" />
+          </svg>
+          Back to Dashboard
+        </button>
+
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -184,14 +211,47 @@ const ManageEventsPage = () => {
               className="input-field pl-9 py-2.5"
             />
           </div>
-          <p className="text-gray-500 text-sm self-center">
-            {filtered.length} event{filtered.length !== 1 ? "s" : ""}
-          </p>
+
+          {/* Category filter */}
+          <select
+            value={selectedCategory}
+            onChange={(e) => {
+              const next = e.target.value;
+              if (next) searchParams.set("category", next);
+              else searchParams.delete("category");
+              setSearchParams(searchParams, { replace: true });
+            }}
+            className="input-field sm:w-52 py-2.5"
+          >
+            <option value="" className="bg-ink-800">All Categories</option>
+            {categories.map((c) => (
+              <option key={c} value={c} className="bg-ink-800">{c}</option>
+            ))}
+          </select>
+
+          <div className="flex items-center gap-3 self-center">
+            {selectedCategory && (
+              <button
+                type="button"
+                onClick={() => {
+                  searchParams.delete("category");
+                  setSearchParams(searchParams, { replace: true });
+                }}
+                className="badge border border-gold-700/40 bg-ink-900/60 text-gold-400 hover:bg-ink-800 transition-colors"
+                title="Clear category filter"
+              >
+                {selectedCategory} ✕
+              </button>
+            )}
+            <p className="text-gray-500 text-sm">
+              {filtered.length} event{filtered.length !== 1 ? "s" : ""}
+            </p>
+          </div>
         </div>
 
         {/* Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
             {Array.from({ length: 6 }).map((_, i) => <EventCardSkeleton key={i} />)}
           </div>
         ) : filtered.length === 0 ? (
@@ -206,7 +266,7 @@ const ManageEventsPage = () => {
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
             {filtered.map((event, i) => (
               <div
                 key={event._id || event.id}

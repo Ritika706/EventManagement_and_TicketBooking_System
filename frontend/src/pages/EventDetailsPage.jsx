@@ -1,12 +1,13 @@
-//  Event Details Page 
+// ── Event Details Page ────────────────────────────────────────────────────────
+
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Loader } from "../components/Loader";
 import Alert from "../components/Alert";
 import { eventsAPI } from "../services/api";
-import { isAuthenticated } from "../services/auth";
+import { isAuthenticated, isAdmin } from "../services/auth";
 
 const formatDate = (dateStr) => {
   if (!dateStr) return "TBD";
@@ -29,7 +30,7 @@ const formatTime = (dateStr) => {
 
 const formatPrice = (price) => {
   if (price === 0 || !price) return "Free";
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(price);
+  return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(price);
 };
 
 const GRADIENTS = [
@@ -42,6 +43,8 @@ const GRADIENTS = [
 const EventDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const adminView = isAdmin();
 
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -81,15 +84,17 @@ const EventDetailsPage = () => {
         <>
           {/* Hero banner */}
           <div className="relative h-72 md:h-96 overflow-hidden">
+            <div className={`absolute inset-0 w-full h-full bg-gradient-to-br ${GRADIENTS[gradIdx]}`} />
             {event.imageUrl ? (
               <img
                 src={event.imageUrl}
                 alt={event.title}
-                className="w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.style.display = "none";
+                }}
               />
-            ) : (
-              <div className={`w-full h-full bg-gradient-to-br ${GRADIENTS[gradIdx]}`} />
-            )}
+            ) : null}
             <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/50 to-transparent" />
 
             {/* Back button */}
@@ -195,60 +200,40 @@ const EventDetailsPage = () => {
                     <div>
                       <div className="flex justify-between text-xs text-gray-500 mb-1">
                         <span>Tickets remaining</span>
-                        <span>{event.availableTickets} / {event.totalTickets}</span>
+                        <span>{event.availableTickets} / {event.totalTickets ?? "?"}</span>
                       </div>
                       <div className="h-1.5 bg-ink-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-gold-500 to-ember rounded-full transition-all"
                           style={{
-                            width: `${Math.max(0, 100 - (event.availableTickets / (event.totalTickets || 1)) * 100)}%`,
+                            width: `${Math.max(
+                              0,
+                              Math.min(100, (event.availableTickets / (event.totalTickets || 1)) * 100)
+                            )}%`,
                           }}
                         />
                       </div>
                     </div>
                   )}
 
-                  {isAuthenticated() ? (
-                    event.availableTickets === 0 ? (
-                      <button disabled className="btn-primary w-full opacity-50 cursor-not-allowed">
-                        Sold Out
-                      </button>
-                    ) : (
-                      <Link
-                        to={`/book/${event._id || event.id}`}
-                        className="btn-primary w-full justify-center py-3.5 text-base"
-                      >
-                        Book Tickets
-                      </Link>
-                    )
-                  ) : (
-                    <div className="space-y-2">
-                      <Link to="/login" className="btn-primary w-full justify-center py-3">
-                        Sign in to Book
-                      </Link>
-                      <Link to="/signup" className="btn-secondary w-full justify-center py-3 text-sm">
-                        Create Free Account
-                      </Link>
-                    </div>
-                  )}
+                  {!adminView ? (
+                    <button
+                      onClick={() => {
+                        if (!isAuthenticated()) {
+                          navigate("/login");
+                          return;
+                        }
+                        navigate(`/book/${event._id || event.id}`);
+                      }}
+                      disabled={event.availableTickets === 0}
+                      className={`btn-primary w-full justify-center py-3.5 text-base ${
+                        event.availableTickets === 0 ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                    >
+                      {event.availableTickets === 0 ? "Sold Out" : "Book Now"}
+                    </button>
+                  ) : null}
                 </div>
-
-                {/* Share */}
-                <button
-                  onClick={() => {
-                    if (navigator.share) {
-                      navigator.share({ title: event.title, url: window.location.href });
-                    } else {
-                      navigator.clipboard.writeText(window.location.href);
-                    }
-                  }}
-                  className="btn-secondary w-full text-sm py-2.5"
-                >
-                  <svg viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
-                    <path d="M7.776 11.527a.75.75 0 10-1.552-.055l-.35 9.858A.75.75 0 007.625 22H8c.414 0 .75.336.75.75h-.001a.75.75 0 01-.75.75H7.624a2.25 2.25 0 01-2.247-2.39l.35-9.857zM8.5 8a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
-                  </svg>
-                  Share Event
-                </button>
               </div>
             </div>
           </main>

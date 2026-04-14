@@ -1,22 +1,23 @@
-// Signup Page
+// ── Signup Page ───────────────────────────────────────────────────────────────
 
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Alert from "../components/Alert";
 import { ButtonLoader } from "../components/Loader";
 import { authAPI } from "../services/api";
-import { saveAuth } from "../services/auth";
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const initialRole = query.get("role") === "admin" ? "admin" : "user";
 
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
-    role: "user",
   });
+  const [role, setRole] = useState(initialRole);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPwd, setShowPwd] = useState(false);
@@ -30,8 +31,7 @@ const SignupPage = () => {
     if (!form.name.trim()) return "Full name is required.";
     if (!form.email) return "Email is required.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) return "Invalid email address.";
-    if (form.password.length < 6) return "Password must be at least 6 characters.";
-    if (form.password !== form.confirmPassword) return "Passwords do not match.";
+    if (form.password.length < 8) return "Password must be at least 8 characters.";
     return null;
   };
 
@@ -46,11 +46,12 @@ const SignupPage = () => {
         name: form.name.trim(),
         email: form.email,
         password: form.password,
-        role: form.role,
+        role,
       });
-      const { token, user } = res.data;
-      saveAuth(token, user);
-      navigate("/");
+      if (res?.data?.success === false) {
+        throw new Error(res.data?.message || "Registration failed");
+      }
+      navigate(`/login?role=${encodeURIComponent(role)}`);
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed. Please try again.");
     } finally {
@@ -136,6 +137,35 @@ const SignupPage = () => {
           {error && <Alert type="error" message={error} />}
 
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            {/* Role */}
+            <div>
+              <label className="input-label">Account type</label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setRole("user")}
+                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                    role === "user"
+                      ? "border-gold-500 bg-gold-500/10 text-gold-300"
+                      : "border-ink-600 bg-ink-900 text-gray-300 hover:border-ink-500"
+                  }`}
+                >
+                  User
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRole("admin")}
+                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                    role === "admin"
+                      ? "border-gold-500 bg-gold-500/10 text-gold-300"
+                      : "border-ink-600 bg-ink-900 text-gray-300 hover:border-ink-500"
+                  }`}
+                >
+                  Admin
+                </button>
+              </div>
+            </div>
+
             {/* Name */}
             <div>
               <label className="input-label">Full Name</label>
@@ -165,35 +195,6 @@ const SignupPage = () => {
               />
             </div>
 
-            {/* Role */}
-            <div>
-              <label className="input-label">Sign up as</label>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setForm((p) => ({ ...p, role: "user" }))}
-                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
-                    form.role === "user"
-                      ? "border-gold-500 bg-gold-500/10 text-gold-300"
-                      : "border-ink-600 bg-ink-900 text-gray-300 hover:border-ink-500"
-                  }`}
-                >
-                  User
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setForm((p) => ({ ...p, role: "admin" }))}
-                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
-                    form.role === "admin"
-                      ? "border-gold-500 bg-gold-500/10 text-gold-300"
-                      : "border-ink-600 bg-ink-900 text-gray-300 hover:border-ink-500"
-                  }`}
-                >
-                  Admin
-                </button>
-              </div>
-            </div>
-
             {/* Password */}
             <div>
               <label className="input-label">Password</label>
@@ -203,7 +204,7 @@ const SignupPage = () => {
                   name="password"
                   value={form.password}
                   onChange={handleChange}
-                  placeholder="Min. 6 characters"
+                  placeholder="Min. 8 characters"
                   className="input-field pr-11"
                   autoComplete="new-password"
                 />
@@ -236,23 +237,6 @@ const SignupPage = () => {
               )}
             </div>
 
-            {/* Confirm password */}
-            <div>
-              <label className="input-label">Confirm Password</label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={form.confirmPassword}
-                onChange={handleChange}
-                placeholder="Repeat password"
-                className="input-field"
-                autoComplete="new-password"
-              />
-              {form.confirmPassword && form.password !== form.confirmPassword && (
-                <p className="text-xs text-red-400 mt-1">Passwords don't match</p>
-              )}
-            </div>
-
             {/* Terms */}
             <p className="text-xs text-gray-500 leading-relaxed">
               By creating an account, you agree to our{" "}
@@ -268,7 +252,7 @@ const SignupPage = () => {
 
           <p className="text-center text-gray-500 text-sm">
             Already have an account?{" "}
-            <Link to="/login" className="text-gold-400 hover:text-gold-300 font-medium transition-colors">
+            <Link to={`/login?role=${encodeURIComponent(role)}`} className="text-gold-400 hover:text-gold-300 font-medium transition-colors">
               Sign in
             </Link>
           </p>

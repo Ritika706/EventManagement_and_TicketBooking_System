@@ -10,7 +10,12 @@ const CreateEventPage = () => {
   const navigate = useNavigate();
 
   const handleCreate = async (payload) => {
-    await eventsAPI.create(payload);
+    const res = await eventsAPI.create(payload);
+    const created = res.data?.event || res.data?.createEve || res.data;
+    // After creating, go back to the admin dashboard
+    if (created) {
+      navigate("/admin/dashboard");
+    }
   };
 
   return (
@@ -59,7 +64,7 @@ const CreateEventPage = () => {
               {[
                 "Use a clear, descriptive title that captures the essence of your event.",
                 "Add a high-quality image URL to increase engagement and click-through rates.",
-                "Set available tickets accurately to avoid overbooking.",
+                "Set total tickets accurately to avoid overbooking.",
                 "Include the full venue name and city in the location field.",
               ].map((tip) => (
                 <li key={tip} className="flex items-start gap-2">

@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { isAuthenticated } from "../services/auth";
 
 const Footer = () => {
   const year = new Date().getFullYear();
+  const authed = isAuthenticated();
 
   return (
     <footer className="border-t border-ink-700/50 bg-ink-900/70 backdrop-blur-sm mt-12">
@@ -23,7 +25,9 @@ const Footer = () => {
           <div className="flex items-center gap-4 text-sm">
             <Link to="/" className="text-gray-400 hover:text-gold-400 transition-colors">Events</Link>
             <Link to="/my-bookings" className="text-gray-400 hover:text-gold-400 transition-colors">My Bookings</Link>
-            <Link to="/login" className="text-gray-400 hover:text-gold-400 transition-colors">Sign In</Link>
+            {!authed && (
+              <Link to="/login" className="text-gray-400 hover:text-gold-400 transition-colors">Sign In</Link>
+            )}
           </div>
         </div>
 

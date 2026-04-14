@@ -1,24 +1,40 @@
-// services/auth.js — login/logout/session helpers
+// ── Auth Utilities ────────────────────────────────────────────────────────────
+// Helpers to manage JWT and user data stored in localStorage.
 
-export const loginUser = (email, name) => {
-  localStorage.setItem("isLoggedIn", "true");
-  localStorage.setItem("userEmail", email);
-  localStorage.setItem("userName", name || email.split("@")[0]);
+/**
+ * Save auth data after successful login.
+ * @param {string} token  JWT token
+ * @param {object} user   User object from API
+ */
+export const saveAuth = (token, user) => {
+  localStorage.setItem("token", token);
+  localStorage.setItem("user", JSON.stringify(user));
 };
 
-export const logoutUser = () => {
-  localStorage.removeItem("isLoggedIn");
-  localStorage.removeItem("userEmail");
-  localStorage.removeItem("userName");
+/** Remove all auth data (logout). */
+export const clearAuth = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
 };
 
-export const isAuthenticated = () => {
-  return localStorage.getItem("isLoggedIn") === "true";
+/** Return the decoded user object or null. */
+export const getUser = () => {
+  try {
+    const raw = localStorage.getItem("user");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
 };
 
-export const getCurrentUser = () => {
-  return {
-    email: localStorage.getItem("userEmail") || "",
-    name: localStorage.getItem("userName") || "",
-  };
+/** Return the stored JWT or null. */
+export const getToken = () => localStorage.getItem("token");
+
+/** Return true if a valid token exists. */
+export const isAuthenticated = () => Boolean(getToken());
+
+/** Return true if the logged-in user has the "admin" role. */
+export const isAdmin = () => {
+  const user = getUser();
+  return user?.role === "admin";
 };

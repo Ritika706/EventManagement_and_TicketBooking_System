@@ -1,7 +1,7 @@
-// Login Page
+// ── Login Page ────────────────────────────────────────────────────────────────
 
 import React, { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Alert from "../components/Alert";
 import { ButtonLoader } from "../components/Loader";
 import { authAPI } from "../services/api";
@@ -10,9 +10,11 @@ import { saveAuth } from "../services/auth";
 const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const query = new URLSearchParams(location.search);
+  const initialRole = query.get("role") === "admin" ? "admin" : "user";
 
-  const [form, setForm] = useState({ email: "", password: "", role: "user" });
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [role, setRole] = useState(initialRole);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -34,11 +36,19 @@ const LoginPage = () => {
       const res = await authAPI.login({
         email: form.email,
         password: form.password,
-        role: form.role,
+        role,
       });
       const { token, user } = res.data;
       saveAuth(token, user);
-      navigate(user.role === "admin" ? "/admin/dashboard" : from, { replace: true });
+      if (user?.role === "admin") {
+        navigate("/admin/dashboard", { replace: true });
+        return;
+      }
+      const from = location.state?.from;
+      const nextPath = from?.pathname
+        ? `${from.pathname}${from.search || ""}${from.hash || ""}`
+        : "/";
+      navigate(nextPath, { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials. Please try again.");
     } finally {
@@ -86,6 +96,27 @@ const LoginPage = () => {
       {/* Right: form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md space-y-8 animate-slide-up">
+          {/* Back */}
+          <div>
+            <button
+              type="button"
+              onClick={() => {
+                if (window.history.length > 1) navigate(-1);
+                else navigate("/");
+              }}
+              className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors text-sm bg-ink-900/60 backdrop-blur-sm px-4 py-2 rounded-lg border border-ink-700/50"
+            >
+              <svg viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
+                <path
+                  fillRule="evenodd"
+                  d="M7.78 12.53a.75.75 0 01-1.06 0L2.47 8.28a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L4.81 7h7.44a.75.75 0 010 1.5H4.81l2.97 2.97a.75.75 0 010 1.06z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              Back
+            </button>
+          </div>
+
           {/* Mobile logo */}
           <div className="lg:hidden text-center">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold-400 to-ember flex items-center justify-center mx-auto mb-3 shadow-lg shadow-gold-500/20">
@@ -102,6 +133,35 @@ const LoginPage = () => {
           {error && <Alert type="error" message={error} />}
 
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            {/* Role */}
+            <div>
+              <label className="input-label">Account type</label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setRole("user")}
+                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                    role === "user"
+                      ? "border-gold-500 bg-gold-500/10 text-gold-300"
+                      : "border-ink-600 bg-ink-900 text-gray-300 hover:border-ink-500"
+                  }`}
+                >
+                  User
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRole("admin")}
+                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                    role === "admin"
+                      ? "border-gold-500 bg-gold-500/10 text-gold-300"
+                      : "border-ink-600 bg-ink-900 text-gray-300 hover:border-ink-500"
+                  }`}
+                >
+                  Admin
+                </button>
+              </div>
+            </div>
+
             {/* Email */}
             <div>
               <label className="input-label">Email address</label>
@@ -117,42 +177,16 @@ const LoginPage = () => {
               />
             </div>
 
-            {/* Role */}
-            <div>
-              <label className="input-label">Login as</label>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setForm((p) => ({ ...p, role: "user" }))}
-                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
-                    form.role === "user"
-                      ? "border-gold-500 bg-gold-500/10 text-gold-300"
-                      : "border-ink-600 bg-ink-900 text-gray-300 hover:border-ink-500"
-                  }`}
-                >
-                  User
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setForm((p) => ({ ...p, role: "admin" }))}
-                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
-                    form.role === "admin"
-                      ? "border-gold-500 bg-gold-500/10 text-gold-300"
-                      : "border-ink-600 bg-ink-900 text-gray-300 hover:border-ink-500"
-                  }`}
-                >
-                  Admin
-                </button>
-              </div>
-            </div>
-
             {/* Password */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="input-label mb-0">Password</label>
-                <button type="button" className="text-xs text-gold-400 hover:text-gold-300 transition-colors">
+                <Link
+                  to={`/forgot-password?role=${encodeURIComponent(role)}`}
+                  className="text-xs text-gold-400 hover:text-gold-300 transition-colors"
+                >
                   Forgot password?
-                </button>
+                </Link>
               </div>
               <div className="relative">
                 <input
@@ -191,7 +225,7 @@ const LoginPage = () => {
 
           <p className="text-center text-gray-500 text-sm">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-gold-400 hover:text-gold-300 font-medium transition-colors">
+            <Link to={`/signup?role=${encodeURIComponent(role)}`} className="text-gold-400 hover:text-gold-300 font-medium transition-colors">
               Create one
             </Link>
           </p>
