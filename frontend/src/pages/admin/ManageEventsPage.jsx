@@ -94,7 +94,6 @@ const ManageEventsPage = () => {
 
   const categories = ["Music", "Tech", "Food", "Art", "Sports", "Conference", "Other"];
 
->>>>>>> dev
   const fetchEvents = useCallback(async () => {
     setLoading(true);
     setError("");
