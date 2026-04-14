@@ -77,11 +77,8 @@ const DeleteModal = ({ eventTitle, onConfirm, onClose, loading }) => (
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 const ManageEventsPage = () => {
-<<<<<<< HEAD
-=======
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
->>>>>>> dev
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -90,9 +87,6 @@ const ManageEventsPage = () => {
   const [editEvent, setEditEvent] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
-
-<<<<<<< HEAD
-=======
   const selectedCategory = useMemo(() => {
     const raw = searchParams.get("category");
     return raw ? String(raw) : "";
@@ -141,11 +135,6 @@ const ManageEventsPage = () => {
     }
   };
 
-<<<<<<< HEAD
-  const filtered = events.filter((e) =>
-    !search || e.title?.toLowerCase().includes(search.toLowerCase())
-  );
-=======
   const filtered = events.filter((e) => {
     const matchesSearch =
       !search ||
@@ -155,7 +144,6 @@ const ManageEventsPage = () => {
       !selectedCategory || String(e.category || "Other").toLowerCase() === selectedCategory.toLowerCase();
     return matchesSearch && matchesCategory;
   });
->>>>>>> dev
 
   return (
     <div className="page-wrapper noise-overlay">
@@ -179,8 +167,6 @@ const ManageEventsPage = () => {
       )}
 
       <div className="pt-24 pb-16 content-container">
-<<<<<<< HEAD
-=======
         {/* Back */}
         <button
           type="button"
@@ -192,8 +178,6 @@ const ManageEventsPage = () => {
           </svg>
           Back to Dashboard
         </button>
-
->>>>>>> dev
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
@@ -226,11 +210,6 @@ const ManageEventsPage = () => {
               className="input-field pl-9 py-2.5"
             />
           </div>
-<<<<<<< HEAD
-          <p className="text-gray-500 text-sm self-center">
-            {filtered.length} event{filtered.length !== 1 ? "s" : ""}
-          </p>
-=======
 
           {/* Category filter */}
           <select
@@ -267,16 +246,11 @@ const ManageEventsPage = () => {
               {filtered.length} event{filtered.length !== 1 ? "s" : ""}
             </p>
           </div>
->>>>>>> dev
         </div>
 
         {/* Grid */}
         {loading ? (
-<<<<<<< HEAD
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-=======
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
->>>>>>> dev
             {Array.from({ length: 6 }).map((_, i) => <EventCardSkeleton key={i} />)}
           </div>
         ) : filtered.length === 0 ? (
@@ -291,11 +265,7 @@ const ManageEventsPage = () => {
             )}
           </div>
         ) : (
-<<<<<<< HEAD
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-=======
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
->>>>>>> dev
             {filtered.map((event, i) => (
               <div
                 key={event._id || event.id}

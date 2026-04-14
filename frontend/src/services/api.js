@@ -48,11 +48,8 @@ export const authAPI = {
   signup: (data) => api.post("/auth/signup", data),
   login: (data) => api.post("/auth/login", data),
   adminLogin: (data) => api.post("/auth/login", { ...data, role: "admin" }),
-<<<<<<< HEAD
-=======
   forgotPassword: (data) => api.post("/auth/forgot-password", data),
   resetPassword: (data) => api.post("/auth/reset-password", data),
->>>>>>> dev
 };
 
 // ── Events ────────────────────────────────────────────────────────────────────
@@ -71,8 +68,3 @@ export const bookingsAPI = {
   getByUser: (userId) => api.get(`/bookings/${userId}`),
   cancel: (id) => api.delete(`/bookings/${id}`),
 };
-<<<<<<< HEAD
-
-export default api;
-=======
->>>>>>> dev

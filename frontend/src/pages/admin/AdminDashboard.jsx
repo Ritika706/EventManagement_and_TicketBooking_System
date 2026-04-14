@@ -123,11 +123,7 @@ const AdminDashboard = () => {
           />
           <StatCard
             title="Total Revenue"
-<<<<<<< HEAD
-            value={`$${revenue.toLocaleString()}`}
-=======
             value={formatInr(revenue, 0)}
->>>>>>> dev
             subtitle="All time earnings"
             color="text-emerald-400"
             delay="0.3s"
@@ -212,11 +208,7 @@ const AdminDashboard = () => {
                         </td>
                         <td className="px-4 py-3 text-gray-300 hidden md:table-cell">{b.quantity || 1}</td>
                         <td className="px-4 py-3 text-gold-400 font-mono hidden md:table-cell">
-<<<<<<< HEAD
-                          ${(b.totalAmount || 0).toFixed(2)}
-=======
                           {formatInr(b.totalAmount || 0, 2)}
->>>>>>> dev
                         </td>
                         <td className="px-4 py-3">
                           <span className={`badge border capitalize text-xs ${
@@ -235,34 +227,6 @@ const AdminDashboard = () => {
             )}
           </div>
         </div>
-
-<<<<<<< HEAD
-        {/* Category breakdown */}
-        {events.length > 0 && (
-          <div className="mt-8">
-            <h2 className="font-display font-bold text-white text-xl mb-4">Events by Category</h2>
-            <div className="glass-card p-5">
-              <div className="flex flex-wrap gap-3">
-                {Object.entries(
-                  events.reduce((acc, e) => {
-                    const cat = e.category || "Other";
-                    acc[cat] = (acc[cat] || 0) + 1;
-                    return acc;
-                  }, {})
-                )
-                  .sort((a, b) => b[1] - a[1])
-                  .map(([cat, count]) => (
-                    <div key={cat} className="flex items-center gap-2 bg-ink-800 rounded-lg px-4 py-2">
-                      <span className="text-white font-medium capitalize">{cat}</span>
-                      <span className="badge bg-gold-500/20 text-gold-400">{count}</span>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          </div>
-        )}
-=======
->>>>>>> dev
       </div>
     </div>
   );

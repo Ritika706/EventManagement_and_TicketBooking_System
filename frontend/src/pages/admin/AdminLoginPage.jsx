@@ -104,9 +104,6 @@ const AdminLoginPage = () => {
             </div>
 
             <div>
-<<<<<<< HEAD
-              <label className="input-label">Password</label>
-=======
               <div className="flex items-center justify-between mb-1.5">
                 <label className="input-label mb-0">Password</label>
                 <Link
@@ -116,7 +113,6 @@ const AdminLoginPage = () => {
                   Forgot password?
                 </Link>
               </div>
->>>>>>> dev
               <input
                 type="password"
                 name="password"
