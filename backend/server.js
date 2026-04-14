@@ -5,6 +5,7 @@ import bookingRoute from './Route/bookingRoutes.js'; //booking routes
 import authRoutes from './Route/authRoutes.js'; //auth routes
 import {connectDB} from './config/db.js';//db.js m se connectdb function call krega jisme mongodb se connect krega
 import cors from "cors";
+
 import { notFound, errorHandler } from "./middleware/errorHandlers.js";
 
 dotenv.config();//env file se uri lene k liye
