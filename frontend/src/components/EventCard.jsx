@@ -27,6 +27,7 @@ const GRADIENTS = [
 const formatDate = (dateStr) => {
   if (!dateStr) return "TBD";
   const d = new Date(dateStr);
+  if (Number.isNaN(d.getTime())) return "TBD";
   return d.toLocaleDateString("en-US", {
     weekday: "short",
     month: "short",
@@ -37,9 +38,9 @@ const formatDate = (dateStr) => {
 
 const formatPrice = (price) => {
   if (price === 0 || price === null || price === undefined) return "Free";
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-IN", {
     style: "currency",
-    currency: "USD",
+    currency: "INR",
     minimumFractionDigits: 0,
   }).format(price);
 };
@@ -78,24 +79,25 @@ const EventCard = ({ event, adminMode = false, onEdit, onDelete }) => {
     <article className="glass-card overflow-hidden event-card-hover group flex flex-col">
       {/* Image / Gradient header */}
       <div className="relative h-44 overflow-hidden flex-shrink-0">
+        {/* Always render fallback; image (if valid) sits on top */}
+        <div
+          className={`absolute inset-0 bg-gradient-to-br ${GRADIENTS[gradientIdx]} flex items-center justify-center`}
+        >
+          <span className="font-display text-5xl font-black text-white/10 select-none uppercase tracking-widest">
+            {title[0]}
+          </span>
+        </div>
+
         {imageUrl ? (
           <img
             src={imageUrl}
             alt={title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             onError={(e) => {
               e.target.style.display = "none";
             }}
           />
-        ) : (
-          <div
-            className={`w-full h-full bg-gradient-to-br ${GRADIENTS[gradientIdx]} flex items-center justify-center`}
-          >
-            <span className="font-display text-5xl font-black text-white/10 select-none uppercase tracking-widest">
-              {title[0]}
-            </span>
-          </div>
-        )}
+        ) : null}
 
         {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-ink-800/80 to-transparent" />
@@ -139,42 +141,46 @@ const EventCard = ({ event, adminMode = false, onEdit, onDelete }) => {
 
         {/* Meta info */}
         <div className="flex flex-col gap-1.5 mt-auto">
-          {date && (
-            <div className="flex items-center gap-2 text-gray-400 text-sm">
-              <svg viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5 text-gold-500 flex-shrink-0">
-                <path d="M5.75 7.5a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5h-4.5z" />
-                <path fillRule="evenodd" d="M4.75 1a.75.75 0 01.75.75V3h5V1.75a.75.75 0 011.5 0V3h.75A2.75 2.75 0 0115.5 5.75v7.5A2.75 2.75 0 0112.75 16H3.25A2.75 2.75 0 01.5 13.25v-7.5A2.75 2.75 0 013.25 3H4V1.75A.75.75 0 014.75 1zM2 5.75v-.5c0-.69.56-1.25 1.25-1.25H12.75c.69 0 1.25.56 1.25 1.25v.5H2zm0 1.5v6c0 .69.56 1.25 1.25 1.25H12.75c.69 0 1.25-.56 1.25-1.25v-6H2z" clipRule="evenodd" />
-              </svg>
-              <span className="truncate">{formatDate(date)}</span>
-            </div>
-          )}
-          {location && (
-            <div className="flex items-center gap-2 text-gray-400 text-sm">
-              <svg viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5 text-gold-500 flex-shrink-0">
-                <path fillRule="evenodd" d="M8 1.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9zM2 6a6 6 0 1110.174 4.31c-.203.196-.359.4-.453.619l-1.256 2.853A.75.75 0 019.875 14h-3.75a.75.75 0 01-.688-.218l-1.22-2.853c-.094-.218-.25-.423-.453-.619A5.98 5.98 0 012 6z" clipRule="evenodd" />
-              </svg>
-              <span className="truncate">{location}</span>
-            </div>
-          )}
-          {availableTickets !== undefined && (
-            <div className="flex items-center gap-2 text-gray-400 text-sm">
-              <svg viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5 text-gold-500 flex-shrink-0">
-                <path d="M5.5 9.438V6.562l2.5 1.438-2.5 1.438zM2.5 1A1.5 1.5 0 001 2.5v11A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-11A1.5 1.5 0 0013.5 1h-11z" />
-              </svg>
+          <div className="flex items-center gap-2 text-gray-400 text-sm">
+            <svg viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5 text-gold-500 flex-shrink-0">
+              <path d="M5.75 7.5a.75.75 0 000 1.5h4.5a.75.75 0 000-1.5h-4.5z" />
+              <path fillRule="evenodd" d="M4.75 1a.75.75 0 01.75.75V3h5V1.75a.75.75 0 011.5 0V3h.75A2.75 2.75 0 0115.5 5.75v7.5A2.75 2.75 0 0112.75 16H3.25A2.75 2.75 0 01.5 13.25v-7.5A2.75 2.75 0 013.25 3H4V1.75A.75.75 0 014.75 1zM2 5.75v-.5c0-.69.56-1.25 1.25-1.25H12.75c.69 0 1.25.56 1.25 1.25v.5H2zm0 1.5v6c0 .69.56 1.25 1.25 1.25H12.75c.69 0 1.25-.56 1.25-1.25v-6H2z" clipRule="evenodd" />
+            </svg>
+            <span className="truncate">{formatDate(date)}</span>
+          </div>
+          <div className="flex items-center gap-2 text-gray-400 text-sm">
+            <svg viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5 text-gold-500 flex-shrink-0">
+              <path fillRule="evenodd" d="M8 1.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9zM2 6a6 6 0 1110.174 4.31c-.203.196-.359.4-.453.619l-1.256 2.853A.75.75 0 019.875 14h-3.75a.75.75 0 01-.688-.218l-1.22-2.853c-.094-.218-.25-.423-.453-.619A5.98 5.98 0 012 6z" clipRule="evenodd" />
+            </svg>
+            <span className="truncate">{location || "TBD"}</span>
+          </div>
+          <div className="flex items-center gap-2 text-gray-400 text-sm">
+            <svg viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5 text-gold-500 flex-shrink-0">
+              <path d="M5.5 9.438V6.562l2.5 1.438-2.5 1.438zM2.5 1A1.5 1.5 0 001 2.5v11A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-11A1.5 1.5 0 0013.5 1h-11z" />
+            </svg>
+            {availableTickets === undefined ? (
+              <span>—</span>
+            ) : (
               <span>
                 <span className={soldOut ? "text-red-400" : "text-emerald-400"}>
                   {soldOut ? "0" : availableTickets}
                 </span>
-                {totalTickets ? ` / ${totalTickets}` : ""} tickets left
+                {` / ${totalTickets ?? "?"}`} tickets left
               </span>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Actions */}
         <div className="flex gap-2 mt-3 pt-3 border-t border-ink-700/50">
           {adminMode ? (
             <>
+              <Link
+                to={`/events/${eventId}`}
+                className="btn-secondary flex-1 px-4 py-2 text-sm"
+              >
+                View Details
+              </Link>
               <button
                 onClick={() => onEdit?.(event)}
                 className="btn-edit flex-1"
@@ -198,18 +204,10 @@ const EventCard = ({ event, adminMode = false, onEdit, onDelete }) => {
             <>
               <Link
                 to={`/events/${eventId}`}
-                className="btn-secondary flex-1 text-sm py-2"
+                className="btn-secondary flex-1 px-4 py-2 text-sm"
               >
-                Details
+                View Details
               </Link>
-              {!soldOut && (
-                <Link
-                  to={`/book/${eventId}`}
-                  className="btn-primary flex-1 text-sm py-2"
-                >
-                  Book Now
-                </Link>
-              )}
             </>
           )}
         </div>

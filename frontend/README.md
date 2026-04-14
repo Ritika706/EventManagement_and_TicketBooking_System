@@ -118,11 +118,57 @@ REACT_APP_API_URL=http://localhost:5000/api
 
 ## 🔐 Authentication Flow
 
+<<<<<<< HEAD
 1. User logs in → receives `{ token, user }` from API
 2. Token and user object saved to `localStorage`
 3. Axios interceptor attaches `Authorization: Bearer <token>` to all requests
 4. On 401 response → auto-logout and redirect to `/login`
 5. `ProtectedRoute` checks `localStorage` for valid token and role
+=======
+1. Login → verify credentials → generate JWT → send `{ token, user }`
+2. Token and user object saved to `localStorage`
+3. Role check → redirect user to `/` or admin to `/admin/dashboard`
+4. Axios interceptor attaches `Authorization: Bearer <token>` to protected API calls
+5. On `401` response → auto-logout and redirect to `/login` (or `/admin/login` for admin pages)
+6. `ProtectedRoute` checks `localStorage` for valid token and role
+
+### ✅ Perfect Auth Flow (Diagram)
+
+```mermaid
+flowchart TD
+	%% Signup
+	A[Signup] --> B[Hash Password (bcrypt)]
+	B --> C[Save User in DB]
+	C --> D[Success]
+
+	%% Login
+	E[Login] --> F[Verify Email + Password]
+	F -->|OK| G[Generate JWT]
+	G --> H[Send token + user]
+	H --> I[Store token/user in frontend (localStorage)]
+	I --> J{Role Check}
+	J -->|user| K[Redirect: / (Event List)]
+	J -->|admin| L[Redirect: /admin/dashboard]
+	I --> M[Use token in protected APIs\nAuthorization: Bearer <token>]
+
+	%% Forgot password
+	N[Forgot Password] --> O[Generate Reset Token]
+	O --> P[Save SHA-256 Hash + Expiry in DB\n(not plain token)]
+	P --> Q[Send Reset Link via Email]
+
+	%% Reset password
+	R[Reset Password] --> S[Verify Token Hash + Expiry]
+	S --> T[Update Password (bcrypt)]
+	T --> U[Success]
+	U --> V[Redirect to Login]
+```
+
+### Error Handling (Examples)
+
+- Invalid email (login / forgot password) → `404`
+- Wrong password → `401`
+- Expired reset token → shows an error message (e.g. "Reset token expired")
+>>>>>>> dev
 
 ---
 

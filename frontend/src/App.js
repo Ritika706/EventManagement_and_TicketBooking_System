@@ -11,6 +11,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 // ── User Pages ─────────────────────────────────────────────────────────────
 import LoginPage       from "./pages/LoginPage";
 import SignupPage      from "./pages/SignupPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import HomePage        from "./pages/HomePage";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import BookingPage     from "./pages/BookingPage";
@@ -49,6 +51,9 @@ const App = () => (
       {/* ── Public: User Auth ─────────────────────────────────────────── */}
       <Route path="/login"  element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
+      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
       {/* ── Public: Admin Auth ────────────────────────────────────────── */}
       <Route path="/admin/login" element={<AdminLoginPage />} />

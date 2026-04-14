@@ -55,5 +55,3 @@ export const EventCardSkeleton = () => (
     </div>
   </div>
 );
-
-export default Loader;
