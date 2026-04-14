@@ -10,16 +10,12 @@ const CreateEventPage = () => {
   const navigate = useNavigate();
 
   const handleCreate = async (payload) => {
-<<<<<<< HEAD
-    await eventsAPI.create(payload);
-=======
     const res = await eventsAPI.create(payload);
     const created = res.data?.event || res.data?.createEve || res.data;
     // After creating, go back to the admin dashboard
     if (created) {
       navigate("/admin/dashboard");
     }
->>>>>>> dev
   };
 
   return (

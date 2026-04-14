@@ -53,8 +53,6 @@ const AdminDashboard = () => {
   }, []);
 
   const revenue = bookings.reduce((s, b) => s + (b.totalAmount || 0), 0);
-<<<<<<< HEAD
-=======
 
   const formatInr = (value, fractionDigits = 0) =>
     new Intl.NumberFormat("en-IN", {
@@ -63,7 +61,6 @@ const AdminDashboard = () => {
       minimumFractionDigits: fractionDigits,
       maximumFractionDigits: fractionDigits,
     }).format(Number(value || 0));
->>>>>>> dev
   const upcomingEvents = events.filter((e) => new Date(e.date) > new Date()).length;
   const totalTicketsSold = bookings.reduce((s, b) => s + (b.quantity || 0), 0);
 

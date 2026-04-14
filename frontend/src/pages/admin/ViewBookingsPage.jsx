@@ -1,10 +1,7 @@
 // ── View Bookings Page (Admin) ────────────────────────────────────────────────
 
 import React, { useState, useEffect, useCallback } from "react";
-<<<<<<< HEAD
-=======
 import { useNavigate } from "react-router-dom";
->>>>>>> dev
 import Navbar from "../../components/Navbar";
 import { Loader } from "../../components/Loader";
 import Alert from "../../components/Alert";

@@ -1,12 +1,7 @@
 // ── Manage Events Page ────────────────────────────────────────────────────────
 
-<<<<<<< HEAD
-import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
-=======
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
->>>>>>> dev
 import Navbar from "../../components/Navbar";
 import EventCard from "../../components/EventCard";
 import EventForm from "../../components/EventForm";
